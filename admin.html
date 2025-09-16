@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Chuma Grandmaster</title>
+    <link rel="stylesheet" href="admin-styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="header-container">
+            <div class="header-logo">
+                <img src="Chuma.png" alt="Chuma Grandmaster Logo" class="logo">
+                <div class="header-text">
+                    <h1>Chuma Grandmaster</h1>
+                    <span class="admin-label">Admin Panel</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="refreshBtn" class="btn btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-home"></i> Back to Website
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="container">
+            <!-- Dashboard Stats -->
+            <section class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="totalQuotes">0</h3>
+                        <p>Total Quotes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon new">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="newQuotes">0</h3>
+                        <p>New Quotes</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon progress">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="inProgressQuotes">0</h3>
+                        <p>In Progress</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon completed">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 id="completedQuotes">0</h3>
+                        <p>Completed</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Filters -->
+            <section class="filters">
+                <div class="filter-group">
+                    <label for="statusFilter">Filter by Status:</label>
+                    <select id="statusFilter">
+                        <option value="all">All Quotes</option>
+                        <option value="new">New</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="rejected">Rejected</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="projectTypeFilter">Filter by Project Type:</label>
+                    <select id="projectTypeFilter">
+                        <option value="all">All Types</option>
+                        <option value="new-website">New Website</option>
+                        <option value="redesign">Website Redesign</option>
+                        <option value="ecommerce">E-commerce Store</option>
+                        <option value="maintenance">Website Maintenance</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button id="clearFilters" class="btn btn-outline">Clear Filters</button>
+                </div>
+            </section>
+
+            <!-- Quote Requests Table -->
+            <section class="quotes-section">
+                <div class="section-header">
+                    <h2>Quote Requests</h2>
+                    <div class="header-actions">
+                        <button id="exportBtn" class="btn btn-outline">
+                            <i class="fas fa-download"></i> Export CSV
+                        </button>
+                        <button id="deleteAllBtn" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Clear All
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table id="quotesTable" class="quotes-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Client</th>
+                                <th>Contact</th>
+                                <th>Project Type</th>
+                                <th>Budget</th>
+                                <th>Timeline</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="quotesTableBody">
+                            <!-- Quote rows will be inserted here -->
+                        </tbody>
+                    </table>
+                    
+                    <div id="noQuotes" class="no-quotes" style="display: none;">
+                        <i class="fas fa-inbox"></i>
+                        <h3>No Quote Requests</h3>
+                        <p>When customers submit quote requests, they will appear here.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Quote Detail Modal -->
+    <div id="quoteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Quote Request Details</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="quoteModalBody">
+                <!-- Quote details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button id="closeModalBtn" class="btn btn-secondary">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Confirm Action</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirmCancel" class="btn btn-secondary">Cancel</button>
+                <button id="confirmAction" class="btn btn-danger">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin-script.js"></script>
+</body>
+</html>
